@@ -1,39 +1,95 @@
-local gui = Instance.new("ScreenGui")
+local function simulateActivity()
 
-gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    if game:GetService("UserInputService").MouseIconEnabled then
 
-local frame = Instance.new("Frame")
+        game:GetService("VirtualUser"):CaptureController()
 
-frame.Size = UDim2.new(0, 200, 0, 50)
+        game:GetService("VirtualUser"):Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
 
-frame.Position = UDim2.new(0.5, -100, 0.5, -25)
+        game:GetService("VirtualUser"):Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
 
-frame.BackgroundColor3 = Color3.new(0, 0, 0)
+    else
 
-frame.BackgroundTransparency = 0.5
+        local input = game:GetService("UserInputService")
 
-frame.BorderSizePixel = 0
+        local displaySize = game:GetService("GuiService"):GetScreenResolution()
 
-frame.Parent = gui
+        input.TouchDown:Fire(Vector2.new(displaySize.X / 2, displaySize.Y / 2))
 
-local textLabel = Instance.new("TextLabel")
+        input.TouchUp:Fire(Vector2.new(displaySize.X / 2, displaySize.Y / 2))
 
-textLabel.Size = UDim2.new(1, 0, 1, 0)
+    end
 
-textLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+end
 
-textLabel.BackgroundTransparency = 1
+local function showGui()
 
-textLabel.TextColor3 = Color3.new(1, 1, 1)
+    local gui = Instance.new("ScreenGui")
 
-textLabel.Text = "ENABLE AFK\nCreator: SUPER VDC"
+    gui.Name = "Anti-AFK Gui"
 
-textLabel.Font = Enum.Font.SourceSansBold
+    gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-textLabel.FontSize = Enum.FontSize.Size18
+    
 
-textLabel.Parent = frame
+    local creatorLabel = Instance.new("TextLabel")
+
+    creatorLabel.Size = UDim2.new(1, 0, 0, 25)
+
+    creatorLabel.Position = UDim2.new(0, 0, 0, 0)
+
+    creatorLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+
+    creatorLabel.BackgroundTransparency = 0.5
+
+    creatorLabel.BorderSizePixel = 0
+
+    creatorLabel.TextColor3 = Color3.new(1, 1, 1)
+
+    creatorLabel.Text = "Creator: SUPER VDC"
+
+    creatorLabel.Font = Enum.Font.SourceSansBold
+
+    creatorLabel.FontSize = Enum.FontSize.Size18
+
+    creatorLabel.Parent = gui
+
+    
+
+    local antiAfkLabel = Instance.new("TextLabel")
+
+    antiAfkLabel.Size = UDim2.new(1, 0, 0, 25)
+
+    antiAfkLabel.Position = UDim2.new(0, 0, 0, 25)
+
+    antiAfkLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+
+    antiAfkLabel.BackgroundTransparency = 0.5
+
+    antiAfkLabel.BorderSizePixel = 0
+
+    antiAfkLabel.TextColor3 = Color3.new(1, 1, 1)
+
+    antiAfkLabel.Text = "Anti-AFK"
+
+    antiAfkLabel.Font = Enum.Font.SourceSansBold
+
+    antiAfkLabel.FontSize = Enum.FontSize.Size18
+
+    antiAfkLabel.Parent = gui
+
+end
+
+local function hideGui()
+
+    game.Players.LocalPlayer.PlayerGui:FindFirstChild("Anti-AFK Gui"):Destroy()
+
+end
+
+game:GetService("Players").LocalPlayer.Idled:Connect(simulateActivity)
+
+showGui()
 
 wait(7)
 
-gui:Destroy()
+hideGui()
